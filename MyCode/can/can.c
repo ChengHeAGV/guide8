@@ -195,6 +195,6 @@ u8 Can_Receive_Msg(u8 *buf)
 u8 cansend[1]={0};
 void send(void)
 {
-	cansend[0]=led[7]|led[6]<<1|led[5]<<2|led[4]<<3|led[3]<<4|led[2]<<5|led[1]<<6|led[0]<<7;
-	Can_Send_Msg(cansend,1);
+	//cansend[0]=led[7]|led[6]<<1|led[5]<<2|led[4]<<3|led[3]<<4|led[2]<<5|led[1]<<6|led[0]<<7;
+	Can_Send_Msg(cansend,8);
 }

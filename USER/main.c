@@ -17,7 +17,7 @@ int main(void)
 	
 	u8 num=0;
 	u8 time_count=0;
-	u8 i=0;	
+	u8 i=0,j=0;	
 	delay_init();	
 	NVIC_Configuration();
 	uart_init(9600);
@@ -37,9 +37,9 @@ int main(void)
 
 	//¶ÁÄÚ´æ
 	FLASH_READ(tempmem, 10);
-	if(tempmem[8] != 6)
+	if(tempmem[8] != 8)
 	{
-		tempmem[8] = 6;
+		tempmem[8] = 8;
 
 		tempmem[0] = (After_filter[0] * 330 / 4096);
 		tempmem[1] = (After_filter[1] * 330 / 4096);
@@ -78,19 +78,44 @@ int main(void)
 				led[i] = 1; 
 			}
 		}
-		cansend[0]=led[7]|led[6]<<1|led[5]<<2|led[4]<<3|led[3]<<4|led[2]<<5|led[1]<<6|led[0]<<7;
-		if(last_cansend!=cansend[0])
+//////////////////////////////////////////////
+//		cansend[0]=led[7]|led[6]<<1|led[5]<<2|led[4]<<3|led[3]<<4|led[2]<<5|led[1]<<6|led[0]<<7;
+//		if(last_cansend!=cansend[0])
+//		{
+//			time_count=0;
+//			send();
+//			last_cansend=cansend[0];
+//		}
+//		if(time_count>200)
+//		{
+//			time_count=0;
+//			send();
+//			last_cansend=cansend[0];
+//		}
+////////////////////////////////////////////////		
+		for(i=0;i<8;i++)
 		{
-			time_count=0;
-			send();
-			last_cansend=cansend[0];
+			if(cansend[i]!=adc2[i])
+			{
+				time_count=0;
+				send();
+				for(j = 0; j < 8; j++)
+				{
+					cansend[j]=adc2[j];
+				}
+			}
 		}
+		
 		if(time_count>200)
 		{
 			time_count=0;
 			send();
-			last_cansend=cansend[0];
-		}
+			for(i = 0; i < 8; i++)
+			{
+				cansend[i]=adc2[i];
+			}
+		}		
+////////////////////////////////////////////////		
 		time_count++;
 		if(num==20)
 		{
